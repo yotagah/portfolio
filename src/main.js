@@ -26,11 +26,12 @@ import { Application, Graphics, Container } from "pixi.js";
     star.beginFill(0xffffff, alpha);
     star.drawCircle(0, 0, Math.random() * 2 + 1);
     star.endFill();
-    star.x = centerX;
-    star.y = centerY;
     star.angle = Math.random() * Math.PI * 2;
     star.speed = Math.random() * 2 + 1;
-    star.distance = 0;
+    star.distance = Math.random() * maxDist;
+    star.x = centerX + Math.cos(star.angle) * star.distance;
+    star.y = centerY + Math.sin(star.angle) * star.distance;
+    star.scale.set(0.3 + (star.distance / maxDist) * 1.7); // Smaller in center, larger at edges
     starContainer.addChild(star);
     stars.push(star);
   }
@@ -75,15 +76,18 @@ import { Application, Graphics, Container } from "pixi.js";
   app.ticker.add((time) => {
     // Animate stars
     stars.forEach((star) => {
-      star.x += Math.cos(star.angle) * star.speed;
-      star.y += Math.sin(star.angle) * star.speed;
-      star.distance += star.speed;
+      const speed = star.speed * (star.distance / maxDist + 0.1); // Faster at edges
+      star.x += Math.cos(star.angle) * speed;
+      star.y += Math.sin(star.angle) * speed;
+      star.distance += star.speed; // Keep distance increasing at base speed
+      star.scale.set(0.3 + (star.distance / maxDist) * 1.7); // Grow as they move out
       if (star.distance > maxDist) {
         star.x = centerX;
         star.y = centerY;
         star.angle = Math.random() * Math.PI * 2;
         star.speed = Math.random() * 2 + 1;
         star.distance = 0;
+        star.scale.set(0.3);
       }
     });
 
