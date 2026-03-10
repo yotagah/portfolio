@@ -17,14 +17,20 @@ import { Application, Graphics, Container } from "pixi.js";
 
   // Create stars
   const stars = [];
+  let centerX = app.screen.width / 2;
+  let centerY = app.screen.height / 2;
+  let maxDist = Math.max(app.screen.width, app.screen.height) / 2 + 100;
   for (let i = 0; i < 200; i++) {
     const star = new Graphics();
-    star.beginFill(0xffffff, Math.random() * 0.8 + 0.2);
+    const alpha = Math.random() * 0.8 + 0.2;
+    star.beginFill(0xffffff, alpha);
     star.drawCircle(0, 0, Math.random() * 2 + 1);
     star.endFill();
-    star.x = Math.random() * app.screen.width;
-    star.y = Math.random() * app.screen.height * 2; // Extra height for scroll
-    star.speed = Math.random() * 0.5 + 0.1;
+    star.x = centerX;
+    star.y = centerY;
+    star.angle = Math.random() * Math.PI * 2;
+    star.speed = Math.random() * 2 + 1;
+    star.distance = 0;
     starContainer.addChild(star);
     stars.push(star);
   }
@@ -69,10 +75,15 @@ import { Application, Graphics, Container } from "pixi.js";
   app.ticker.add((time) => {
     // Animate stars
     stars.forEach((star) => {
-      star.y -= star.speed;
-      if (star.y < -10) {
-        star.y = app.screen.height + 10;
-        star.x = Math.random() * app.screen.width;
+      star.x += Math.cos(star.angle) * star.speed;
+      star.y += Math.sin(star.angle) * star.speed;
+      star.distance += star.speed;
+      if (star.distance > maxDist) {
+        star.x = centerX;
+        star.y = centerY;
+        star.angle = Math.random() * Math.PI * 2;
+        star.speed = Math.random() * 2 + 1;
+        star.distance = 0;
       }
     });
 
@@ -89,6 +100,22 @@ import { Application, Graphics, Container } from "pixi.js";
   // Handle resize
   window.addEventListener("resize", () => {
     app.resize();
-    // Recalculate positions if needed
+    const newCenterX = app.screen.width / 2;
+    const newCenterY = app.screen.height / 2;
+    const newMaxDist = Math.max(app.screen.width, app.screen.height) / 2 + 100;
+    // Update ship positions relative to new screen
+    shipPositions.forEach((pos, index) => {
+      if (index === 0) {
+        pos.x = newCenterX;
+        pos.y = newCenterY;
+      } else {
+        pos.x = (pos.x / centerX) * newCenterX;
+        pos.y = (pos.y / centerY) * newCenterY;
+      }
+    });
+    // Update variables
+    centerX = newCenterX;
+    centerY = newCenterY;
+    maxDist = newMaxDist;
   });
 })();
