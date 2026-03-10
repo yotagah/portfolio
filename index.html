@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css">
+    <title>Game Developer Portfolio</title>
+</head>
+
+<body>
+    <div id="app">
+        <canvas id="pixi-canvas"></canvas>
+        <div id="portfolio-sections">
+            <section id="intro" class="portfolio-item">
+                <h1>Welcome to My Game Portfolio</h1>
+                <p>Explore the games I've created using various technologies, including PixiJS.</p>
+            </section>
+            <section id="game1" class="portfolio-item">
+                <h2>Game 1: Title</h2>
+                <img src="/assets/game1-thumbnail.jpg" alt="Game 1 Thumbnail">
+                <p>Description of Game 1...</p>
+                <a href="https://example.com/game1" target="_blank">Play Online</a>
+                <p>Instructions: How to run...</p>
+            </section>
+            <section id="game2" class="portfolio-item">
+                <h2>Game 2: Title</h2>
+                <video controls>
+                    <source src="/assets/game2-demo.mp4" type="video/mp4">
+                </video>
+                <p>Description of Game 2...</p>
+                <a href="/downloads/game2.zip" download>Download</a>
+                <p>Instructions: Extract and run index.html...</p>
+            </section>
+            <!-- Add more sections as needed -->
+            <section id="game3" class="portfolio-item">
+                <h2>Game 3: Title</h2>
+                <img src="/assets/game3-thumbnail.jpg" alt="Game 3 Thumbnail">
+                <p>Description...</p>
+                <a href="https://example.com/game3">Play</a>
+            </section>
+            <section id="game4" class="portfolio-item">
+                <h2>Game 4: Title</h2>
+                <p>Description...</p>
+                <a href="/downloads/game4.zip" download>Download</a>
+            </section>
+            <section id="game5" class="portfolio-item">
+                <h2>Game 5: Title</h2>
+                <img src="/assets/game5-thumbnail.jpg" alt="Game 5 Thumbnail">
+                <p>Description...</p>
+                <a href="https://example.com/game5">Play</a>
+            </section>
+        </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
