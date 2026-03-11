@@ -99,7 +99,7 @@ body {
 
 .intro-bottom {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 15px;
     width: 100%;
 }
@@ -145,7 +145,7 @@ body {
 .portfolio-item img {
     max-width: 100%;
     max-height: 300px;
-    margin: 0;
+    margin: 0 0 20px 0;
 }
 
 .portfolio-item iframe {
@@ -225,7 +225,8 @@ body {
         border-radius: 15px;
         height: auto;
         min-height: 50vh;
-    }    .intro-top {
+    }
+    .intro-top {
         flex-direction: column;
         text-align: center;
         gap: 15px;
@@ -242,9 +243,9 @@ body {
         gap: 10px;
     }
     .portfolio-item h1 {
-        font-size: 1.5em;
+        font-size: 1.2em;
     }
     .portfolio-item p {
-        font-size: 0.9em;
+        font-size: 0.8em;
     }
 }
