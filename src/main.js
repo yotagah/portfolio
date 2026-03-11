@@ -19,19 +19,20 @@ import { Application, Graphics, Container } from "pixi.js";
   const stars = [];
   let centerX = app.screen.width / 2;
   let centerY = app.screen.height / 2;
-  let maxDist = Math.max(app.screen.width, app.screen.height) / 2 + 100;
+  let maxDist =
+    Math.sqrt((app.screen.width / 2) ** 2 + (app.screen.height / 2) ** 2) + 100;
   for (let i = 0; i < 200; i++) {
     const star = new Graphics();
-    const alpha = Math.random() * 0.8 + 0.2;
-    star.beginFill(0xffffff, alpha);
+    star.beginFill(0xffffff);
     star.drawCircle(0, 0, Math.random() * 2 + 1);
     star.endFill();
     star.angle = Math.random() * Math.PI * 2;
     star.speed = Math.random() * 2 + 1;
-    star.distance = Math.random() * maxDist;
+    star.distance = (Math.random() ** 2) * maxDist;
     star.x = centerX + Math.cos(star.angle) * star.distance;
     star.y = centerY + Math.sin(star.angle) * star.distance;
     star.scale.set(0.3 + (star.distance / maxDist) * 1.7); // Smaller in center, larger at edges
+    star.alpha = 0.2 + (1 - star.distance / maxDist) * 0.8; // Fade out towards edges
     starContainer.addChild(star);
     stars.push(star);
   }
@@ -76,11 +77,12 @@ import { Application, Graphics, Container } from "pixi.js";
   app.ticker.add((time) => {
     // Animate stars
     stars.forEach((star) => {
-      const speed = star.speed * (star.distance / maxDist + 0.1); // Faster at edges
-      star.x += Math.cos(star.angle) * speed;
-      star.y += Math.sin(star.angle) * speed;
-      star.distance += star.speed; // Keep distance increasing at base speed
+      const fixedSpeed = star.speed * (star.distance / maxDist + 0.1) * 10; // Faster at edges
+      star.x += Math.cos(star.angle) * fixedSpeed;
+      star.y += Math.sin(star.angle) * fixedSpeed;
+      star.distance += fixedSpeed; // Keep distance increasing at base speed
       star.scale.set(0.3 + (star.distance / maxDist) * 1.7); // Grow as they move out
+      star.alpha = 0.2 + (1 - star.distance / maxDist) * 0.8; // Fade out towards edges
       if (star.distance > maxDist) {
         star.x = centerX;
         star.y = centerY;
@@ -88,6 +90,7 @@ import { Application, Graphics, Container } from "pixi.js";
         star.speed = Math.random() * 2 + 1;
         star.distance = 0;
         star.scale.set(0.3);
+        star.alpha = Math.random() * 0.8 + 0.2;
       }
     });
 
