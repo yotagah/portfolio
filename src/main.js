@@ -37,9 +37,7 @@ import { Application, Graphics, Container, Sprite, Assets } from "pixi.js";
     Math.sqrt((app.screen.width / 2) ** 2 + (app.screen.height / 2) ** 2) + 100;
   for (let i = 0; i < 300; i++) {
     const star = new Graphics();
-    star.beginFill(0xffffff);
-    star.drawCircle(0, 0, Math.random() * 2 + 1);
-    star.endFill();
+    star.circle(0, 0, Math.random() * 2 + 1).fill(0xffffff);
     star.angle = Math.random() * Math.PI * 2;
     star.speed = Math.random() * 2 + 1;
     star.distance = Math.pow(Math.random(), 2) * maxDist;
