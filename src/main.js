@@ -1,4 +1,4 @@
-import { Application, Graphics, Container } from "pixi.js";
+import { Application, Graphics, Container, Sprite, Assets } from "pixi.js";
 
 (async () => {
   // Create a new application
@@ -11,14 +11,28 @@ import { Application, Graphics, Container } from "pixi.js";
     canvas: document.getElementById("pixi-canvas"),
   });
 
+  let centerX = app.screen.width / 2;
+  let centerY = app.screen.height / 2;
+
+  // Load background texture
+  const bgTexture = await Assets.load("public/assets/saturn.png");
+
+  // Create background sprite
+  const bgSprite = new Sprite(bgTexture);
+  bgSprite.anchor.set(0.5);
+  bgSprite.x = centerX;
+  bgSprite.y = centerY;
+  const scaleX = app.screen.width / bgTexture.width;
+  const scaleY = app.screen.height / bgTexture.height;
+  bgSprite.scale.set(Math.max(scaleX, scaleY));
+  app.stage.addChild(bgSprite);
+
   // Create a container for stars
   const starContainer = new Container();
   app.stage.addChild(starContainer);
 
   // Create stars
   const stars = [];
-  let centerX = app.screen.width / 2;
-  let centerY = app.screen.height / 2;
   let maxDist =
     Math.sqrt((app.screen.width / 2) ** 2 + (app.screen.height / 2) ** 2) + 100;
   for (let i = 0; i < 200; i++) {
@@ -28,7 +42,7 @@ import { Application, Graphics, Container } from "pixi.js";
     star.endFill();
     star.angle = Math.random() * Math.PI * 2;
     star.speed = Math.random() * 2 + 1;
-    star.distance = (Math.random() ** 2) * maxDist;
+    star.distance = Math.pow(Math.random(), 2) * maxDist;
     star.x = centerX + Math.cos(star.angle) * star.distance;
     star.y = centerY + Math.sin(star.angle) * star.distance;
     star.scale.set(0.3 + (star.distance / maxDist) * 1.7); // Smaller in center, larger at edges
@@ -94,6 +108,9 @@ import { Application, Graphics, Container } from "pixi.js";
       }
     });
 
+    // Animate background
+    bgSprite.y = centerY + Math.sin(time.elapsedMS * 0.0001) * 50;
+
     // Move ship towards target
     const dx = targetX - ship.x;
     const dy = targetY - ship.y;
@@ -109,7 +126,16 @@ import { Application, Graphics, Container } from "pixi.js";
     app.resize();
     const newCenterX = app.screen.width / 2;
     const newCenterY = app.screen.height / 2;
-    const newMaxDist = Math.max(app.screen.width, app.screen.height) / 2 + 100;
+    const newMaxDist =
+      Math.sqrt(
+        Math.pow(app.screen.width / 2, 2) + Math.pow(app.screen.height / 2, 2),
+      ) + 100;
+    // Update background
+    const newScaleX = app.screen.width / bgTexture.width;
+    const newScaleY = app.screen.height / bgTexture.height;
+    bgSprite.scale.set(Math.max(newScaleX, newScaleY));
+    bgSprite.x = newCenterX;
+    bgSprite.y = newCenterY;
     // Update ship positions relative to new screen
     shipPositions.forEach((pos, index) => {
       if (index === 0) {
