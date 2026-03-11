@@ -35,7 +35,7 @@ import { Application, Graphics, Container, Sprite, Assets } from "pixi.js";
   const stars = [];
   let maxDist =
     Math.sqrt((app.screen.width / 2) ** 2 + (app.screen.height / 2) ** 2) + 100;
-  for (let i = 0; i < 200; i++) {
+  for (let i = 0; i < 300; i++) {
     const star = new Graphics();
     star.beginFill(0xffffff);
     star.drawCircle(0, 0, Math.random() * 2 + 1);
@@ -74,6 +74,7 @@ import { Application, Graphics, Container, Sprite, Assets } from "pixi.js";
   let currentSection = 0;
   let targetX = shipPositions[0].x;
   let targetY = shipPositions[0].y;
+  let animationTime = 0;
 
   // Scroll event
   window.addEventListener("scroll", () => {
@@ -89,6 +90,8 @@ import { Application, Graphics, Container, Sprite, Assets } from "pixi.js";
 
   // Animation loop
   app.ticker.add((time) => {
+    animationTime += time.elapsedMS;
+
     // Animate stars
     stars.forEach((star) => {
       const fixedSpeed = star.speed * (star.distance / maxDist + 0.1) * 10; // Faster at edges
@@ -109,7 +112,7 @@ import { Application, Graphics, Container, Sprite, Assets } from "pixi.js";
     });
 
     // Animate background
-    bgSprite.y = centerY + Math.sin(time.elapsedMS * 0.0001) * 50;
+    bgSprite.y = centerY + Math.sin(animationTime * 0.001) * 5 + Math.sin(animationTime * 0.05) * 1;
 
     // Move ship towards target
     const dx = targetX - ship.x;
@@ -118,7 +121,7 @@ import { Application, Graphics, Container, Sprite, Assets } from "pixi.js";
     ship.y += dy * 0.05;
 
     // Rotate ship slightly
-    ship.rotation = Math.sin(time.elapsedMS * 0.001) * 0.1;
+    ship.rotation = Math.sin(animationTime * 0.001) * 0.1;
   });
 
   // Handle resize
