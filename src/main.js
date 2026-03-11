@@ -15,7 +15,7 @@ import { Application, Graphics, Container, Sprite, Assets } from "pixi.js";
   let centerY = app.screen.height / 2;
 
   // Load background texture
-  const bgTexture = await Assets.load("public/assets/saturn.png");
+  const bgTexture = await Assets.load("public/assets/saturn.jpg");
 
   // Create background sprite
   const bgSprite = new Sprite(bgTexture);
@@ -51,42 +51,7 @@ import { Application, Graphics, Container, Sprite, Assets } from "pixi.js";
     stars.push(star);
   }
 
-  // Create ship
-  const ship = new Graphics();
-  ship.beginFill(0x00ff00);
-  ship.moveTo(0, -10);
-  ship.lineTo(-5, 10);
-  ship.lineTo(5, 10);
-  ship.closePath();
-  ship.endFill();
-  app.stage.addChild(ship);
-
-  // Ship positions for each section (x, y)
-  const shipPositions = [
-    { x: app.screen.width / 2, y: app.screen.height / 2 }, // intro
-    { x: app.screen.width * 0.2, y: app.screen.height * 1.5 },
-    { x: app.screen.width * 0.8, y: app.screen.height * 2.5 },
-    { x: app.screen.width * 0.3, y: app.screen.height * 3.5 },
-    { x: app.screen.width * 0.7, y: app.screen.height * 4.5 },
-    { x: app.screen.width * 0.5, y: app.screen.height * 5.5 },
-  ];
-
-  let currentSection = 0;
-  let targetX = shipPositions[0].x;
-  let targetY = shipPositions[0].y;
   let animationTime = 0;
-
-  // Scroll event
-  window.addEventListener("scroll", () => {
-    const scrollY = window.scrollY;
-    const sectionHeight = window.innerHeight;
-    const newSection = Math.floor(scrollY / sectionHeight);
-    if (newSection !== currentSection && newSection < shipPositions.length) {
-      currentSection = newSection;
-      targetX = shipPositions[currentSection].x;
-      targetY = shipPositions[currentSection].y;
-    }
-  });
 
   // Animation loop
   app.ticker.add((time) => {
@@ -112,16 +77,10 @@ import { Application, Graphics, Container, Sprite, Assets } from "pixi.js";
     });
 
     // Animate background
-    bgSprite.y = centerY + Math.sin(animationTime * 0.001) * 5 + Math.sin(animationTime * 0.05) * 1;
-
-    // Move ship towards target
-    const dx = targetX - ship.x;
-    const dy = targetY - ship.y;
-    ship.x += dx * 0.05;
-    ship.y += dy * 0.05;
-
-    // Rotate ship slightly
-    ship.rotation = Math.sin(animationTime * 0.001) * 0.1;
+    bgSprite.y =
+      centerY +
+      Math.sin(animationTime * 0.001) * 5 +
+      Math.sin(animationTime * 0.05) * 1;
   });
 
   // Handle resize
@@ -139,16 +98,6 @@ import { Application, Graphics, Container, Sprite, Assets } from "pixi.js";
     bgSprite.scale.set(Math.max(newScaleX, newScaleY));
     bgSprite.x = newCenterX;
     bgSprite.y = newCenterY;
-    // Update ship positions relative to new screen
-    shipPositions.forEach((pos, index) => {
-      if (index === 0) {
-        pos.x = newCenterX;
-        pos.y = newCenterY;
-      } else {
-        pos.x = (pos.x / centerX) * newCenterX;
-        pos.y = (pos.y / centerY) * newCenterY;
-      }
-    });
     // Update variables
     centerX = newCenterX;
     centerY = newCenterY;
