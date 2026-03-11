@@ -15,7 +15,7 @@ import { Application, Graphics, Container, Sprite, Assets } from "pixi.js";
   let centerY = app.screen.height / 2;
 
   // Load background texture
-  const bgTexture = await Assets.load("public/assets/saturn.jpg");
+  const bgTexture = await Assets.load("/assets/saturn.jpg");
 
   // Create background sprite
   const bgSprite = new Sprite(bgTexture);
