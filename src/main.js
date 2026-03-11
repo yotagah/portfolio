@@ -103,4 +103,13 @@ import { Application, Graphics, Container, Sprite, Assets } from "pixi.js";
     centerY = newCenterY;
     maxDist = newMaxDist;
   });
+
+  // Game square click handlers
+  document.querySelectorAll(".game-square").forEach((square) => {
+    square.addEventListener("click", () => {
+      const target = square.dataset.target;
+      const section = document.getElementById(target);
+      section.scrollIntoView({ behavior: "smooth" });
+    });
+  });
 })();
